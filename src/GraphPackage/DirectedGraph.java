@@ -14,6 +14,13 @@ public class DirectedGraph<T> implements GraphInterface<T> {
         edgeCount = 0;
     } // end default constructor
 
+    public boolean findVertex(T vertexlabel){
+
+        if(vertices.contains(vertexlabel))
+            return true;
+        return false;
+    }
+
     public boolean addVertex(T vertexLabel) {
         VertexInterface<T> addOutcome = vertices.add(vertexLabel, new Vertex<>(vertexLabel));
         return addOutcome == null; // Was addition to dictionary successful?

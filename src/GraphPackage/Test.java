@@ -1,6 +1,7 @@
 package GraphPackage;
 
 import ADTPackage.LinkedQueue;
+import ADTPackage.LinkedStack;
 import ADTPackage.QueueInterface;
 import GraphPackage.UndirectedGraph;
 import GraphPackage.Vertex;
@@ -17,27 +18,67 @@ public class Test {
 
         File file = new File(path);
         Scanner scan = new Scanner(file).useDelimiter("\n");
-        String s, label;
-        int line = 0, size= 0;
+        String s, label = "", startVertex = "0-1", endVertex = null;
+        int line = 0, width= 0;
 
         while(scan.hasNextLine()) {
-            line++;
             s = scan.next();
-            size = s.length();
+            width = s.length();
             for(int i = 0; i < s.length()-1; i++){
                 if(s.charAt(i) != '#') {
-                    label = line + "-" + (i+1);
+                    label = line + "-" + i;
                     maze.addVertex(label);
                 }
             }
-            System.out.println();
+            endVertex = label;
+            line++;
+        }
+        scan.close();
+
+        for(int i = line-1; i >= 0; i--){
+            for(int j = width - 1; j >= 0; j--){
+                label = i + "-" + j;
+
+                if(maze.findVertex(label)){
+                    if(maze.findVertex(i + "-" + (j+1)))
+                        maze.addEdge(label, i + "-" + (j+1), 0);
+                    if(maze.findVertex(i + "-" + (j-1)))
+                        maze.addEdge(label, i + "-" + (j-1),0);
+                    if(maze.findVertex((i+1) + "-" + j))
+                        maze.addEdge(label, (i+1) + "-" + j,0);
+                    if(maze.findVertex((i-1) + "-" + j))
+                        maze.addEdge(label, (i-1) + "-" + j,0);
+                }
+            }
         }
 
+        maze.displayEdges();
 
+        QueueInterface<String> que;
+        que = maze.getBreadthFirstTraversal(startVertex, endVertex);
+        while(!que.isEmpty())
+            System.out.println(que.dequeue());
 
-
-
-
+//        Scanner scan1 = new Scanner(file).useDelimiter("\n");
+//        line = 0;
+//
+//        while(scan1.hasNextLine()){
+//            s = scan1.next();
+//
+//            for(int i = 0; i < s.length()-1; i++){
+//                if(s.charAt(i) != '#') {
+//                    label = line + "-" + i;
+//                    if(que.getFront().equals(label)) {
+//                        System.out.print(".");
+//                        que.dequeue();
+//                    }
+//                }
+//                else
+//                    System.out.print("#");
+//            }
+//            System.out.println();
+//            line++;
+//        }
 
 
 //        QueueInterface<String> print = new LinkedQueue<>();
