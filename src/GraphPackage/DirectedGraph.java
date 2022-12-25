@@ -1,5 +1,7 @@
 package GraphPackage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import ADTPackage.*; // Classes that implement various ADTs
@@ -135,13 +137,13 @@ public class DirectedGraph<T> implements GraphInterface<T> {
         while (!vertexStack.isEmpty()) {
             VertexInterface<T> topVertex = vertexStack.peek();
 
-                if (topVertex.getUnvisitedNeighbor() != null) {
-                    VertexInterface<T> nextNeighbor = topVertex.getUnvisitedNeighbor();
-                    nextNeighbor.visit();
-                    traversalOrder.enqueue(nextNeighbor.getLabel());
-                    vertexStack.push(nextNeighbor);
-                } else
-                    vertexStack.pop();
+            if (topVertex.getUnvisitedNeighbor() != null) {
+                VertexInterface<T> nextNeighbor = topVertex.getUnvisitedNeighbor();
+                nextNeighbor.visit();
+                traversalOrder.enqueue(nextNeighbor.getLabel());
+                vertexStack.push(nextNeighbor);
+            } else
+                vertexStack.pop();
 
         }
 
@@ -303,41 +305,78 @@ public class DirectedGraph<T> implements GraphInterface<T> {
         } // end toString
     } // end EntryPQ
 
-    public void adjacenyMatrix() {
+    public void adjacenyList() {
         System.out.println("\n----------------------ADJACENY LİST-----------------------");
         Iterator valueIterator = vertices.getValueIterator();
         Iterator neighborIterator;
         Vertex<String> vertex, neighbor;
-        String label = "";
-        String[][] matrix = new String[getNumberOfVertices()][getNumberOfVertices()];
-        String[] splittedLabel;
-        int row = getNumberOfVertices()-1, column = getNumberOfVertices()-1;
+        String label;
 
         while (valueIterator.hasNext()) {
-
             vertex = (Vertex<String>) valueIterator.next();
             label = vertex.getLabel();
-//            System.out.println("[" + label + "]");
-//            splittedLabel = label.split("-");
+            System.out.println("[" + label + "]");
             neighborIterator = vertex.getNeighborIterator();
             while (neighborIterator.hasNext()) {
-                matrix[row][column] = "0";
-                if(column != 0)
-                    matrix[row][column -1] = "1";
                 neighbor = (Vertex<String>) neighborIterator.next();
                 label = neighbor.getLabel();
                 System.out.println(label);
-                column--;
             }
-            row--;
         }
 
-        for(int i = 0; i < getNumberOfVertices(); i++){
-            for(int j = 0; j < getNumberOfVertices(); j++){
-                System.out.print(matrix[i][j]);
+
+    }
+
+    public void adjacencyMatrix() {
+        String[][] matrix = new String[getNumberOfVertices() + 1][getNumberOfVertices() + 1];
+        Iterator<VertexInterface<T>> values = vertices.getValueIterator();
+        Iterator<VertexInterface<T>> values1 = vertices.getValueIterator();
+        VertexInterface<T> vertex, neighbor;
+        String label, neiLabel;
+        int counter = getNumberOfVertices();
+
+        //giving all indexes of the matrix 0
+        for(int i = 0; i < matrix.length; i++){
+            Arrays.fill(matrix[i], "0");
+        }
+
+        //filling border of the matrix with vertices
+        while (values.hasNext()) {
+            vertex = values.next();
+            if(counter > 0) {
+                matrix[0][counter] = vertex.getLabel().toString();
+                matrix[counter][0] = vertex.getLabel().toString();
+            }
+            counter--;
+        }
+        while(values1.hasNext()){
+            vertex = values1.next();
+            label = vertex.getLabel().toString();
+            Iterator<VertexInterface<T>> neighbors = vertex.getNeighborIterator();
+            while(neighbors.hasNext()){
+                neighbor = neighbors.next();
+                neiLabel = neighbor.getLabel().toString();
+                for(int i = 1; i < matrix.length; i++){
+                    for(int j = 1; j < matrix[i].length; j++){
+                        if(i == j)
+                            matrix[i][j] = "0";
+                        else if(matrix[i][0].equals(label)){
+                            if(matrix[0][j].equals(neiLabel))
+                                matrix[i][j] = "1";
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("\n---------------------ADJACENY MATRİX----------------------");
+        for(int i = 0; i < matrix.length; i++){
+            for(int j = 0; j < matrix[i].length; j++){
+                if(j == 0 || i == 0)
+                    System.out.print("   " + matrix[i][j] + " ");
+                else
+                    System.out.print("   " + matrix[i][j] + "   ");
             }
             System.out.println();
         }
-
     }
 } // end DirectedGraph
