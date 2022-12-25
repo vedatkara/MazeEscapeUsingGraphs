@@ -307,20 +307,20 @@ public class DirectedGraph<T> implements GraphInterface<T> {
 
     public void adjacenyList() {
         System.out.println("\n----------------------ADJACENY LİST-----------------------");
-        Iterator valueIterator = vertices.getValueIterator();
+        Iterator valueIterator = vertices.getValueIterator();// get vertices
         Iterator neighborIterator;
         Vertex<String> vertex, neighbor;
         String label;
 
         while (valueIterator.hasNext()) {
-            vertex = (Vertex<String>) valueIterator.next();
-            label = vertex.getLabel();
-            System.out.println("[" + label + "]");
-            neighborIterator = vertex.getNeighborIterator();
+            vertex = (Vertex<String>) valueIterator.next();//get next vertex
+            label = vertex.getLabel();// keep the label
+            System.out.println("[" + label + "]");//print the vertex's  label that about to shown neighbors
+            neighborIterator = vertex.getNeighborIterator();//get neighbors
             while (neighborIterator.hasNext()) {
                 neighbor = (Vertex<String>) neighborIterator.next();
                 label = neighbor.getLabel();
-                System.out.println(label);
+                System.out.println(label);//print the neighbor
             }
         }
 
@@ -335,15 +335,15 @@ public class DirectedGraph<T> implements GraphInterface<T> {
         String label, neiLabel;
         int counter = getNumberOfVertices();
 
-        //giving all indexes of the matrix 0
+        //fill the matrix with 0's
         for(int i = 0; i < matrix.length; i++){
             Arrays.fill(matrix[i], "0");
         }
 
-        //filling border of the matrix with vertices
+        //filling border of the matrix with vertices labels
         while (values.hasNext()) {
             vertex = values.next();
-            if(counter > 0) {
+            if(counter > 0) {//begin with last index because iterator is going backwards
                 matrix[0][counter] = vertex.getLabel().toString();
                 matrix[counter][0] = vertex.getLabel().toString();
             }
@@ -358,16 +358,17 @@ public class DirectedGraph<T> implements GraphInterface<T> {
                 neiLabel = neighbor.getLabel().toString();
                 for(int i = 1; i < matrix.length; i++){
                     for(int j = 1; j < matrix[i].length; j++){
-                        if(i == j)
+                        if(i == j)//a vertex can not be neighbor with itself.
                             matrix[i][j] = "0";
-                        else if(matrix[i][0].equals(label)){
-                            if(matrix[0][j].equals(neiLabel))
+                        else if(matrix[i][0].equals(label)){//find the column that represents the vertex
+                            if(matrix[0][j].equals(neiLabel))//find the column that represents the neighbor
                                 matrix[i][j] = "1";
                         }
                     }
                 }
             }
         }
+        //print the matrix
         System.out.println("\n---------------------ADJACENY MATRİX----------------------");
         for(int i = 0; i < matrix.length; i++){
             for(int j = 0; j < matrix[i].length; j++){
