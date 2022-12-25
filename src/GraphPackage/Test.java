@@ -8,13 +8,13 @@ import java.util.Scanner;
 
 public class Test {
 
-    public static void main(String[] args) throws FileNotFoundException {
-//        try {
+    public static void main(String[] args) {
+        try {
             String path = "C:\\Users\\vedat\\OneDrive\\Masaüstü\\MazeEscapeUsingGraphs\\maze1.txt";
             solve(path);
-//        } catch (Exception e) {
-//            System.out.println("File could not found");
-//        }
+        } catch (Exception e) {
+            System.out.println("File could not found");
+        }
     }
 
     public static void solve(String path) throws FileNotFoundException {
